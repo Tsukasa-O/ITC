@@ -22,8 +22,7 @@
                 <a href={% url 'nippo-update' obj.pk %} class="card-link">
                     編集
                 </a>
-                {% comment %} <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-{{object.pk}}">削除</button> {% endcomment %}
-                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ object.pk }}">削除</button>
+                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ obj.pk }}">削除</button>
             </div>
         </div>
         {% include "nippo/nippo-delete.html" with object=obj %}
