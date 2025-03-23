@@ -1,7 +1,51 @@
 from django.shortcuts import render, get_object_or_404, redirect
 # from random import randint
+from django.views.generic import ListView, DetailView, FormView #インポート
+from django.views.generic.edit import CreateView, UpdateView
 from .models import NippoModel
-from .forms import NippoFormClass
+from .forms import NippoModelForm, NippoFormClass
+from django.urls import reverse_lazy
+
+class NippoListView(ListView): #クラス作成
+    template_name = "nippo/nippo-list.html" #変数
+    model = NippoModel #変数
+    
+    def get_queryset(self):
+        qs = NippoModel.objects.all()
+        return qs
+    
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        return ctx
+
+class NippoDetailView(DetailView):
+    template_name = "nippo/nippo-detail.html"
+    model = NippoModel
+    
+    def get_object(self):
+        return super().get_object()
+    
+class NippoCreateModelFormView(CreateView):
+    template_name = "nippo/nippo-form.html"
+    form_class = NippoModelForm
+    success_url = reverse_lazy("nippo-list")
+    
+class NippoUpdateModelFormView(UpdateView):
+    template_name = "nippo/nippo-form.html"
+    model = NippoModel
+    form_class = NippoModelForm
+    success_url = reverse_lazy("nippo-list")
+
+class NippoCreateFormView(FormView):
+    template_name = "nippo/nippo-form.html"
+    form_class = NippoFormClass
+    success_url = reverse_lazy("nippo-list")
+    
+    def form_valid(self, form):
+        data = form.cleaned_data
+        obj = NippoModel(**data)
+        obj.save()
+        return super().form_valid(form)
 
 def nippoListView(request):
     template_name = "nippo/nippo-list.html"
