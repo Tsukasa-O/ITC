@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     # apps
     'nippo',
     'accounts',
+    "crispy_forms",
+    "crispy_bootstrap4",
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -136,3 +138,21 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USERNAME_REQUIRED = False 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
+
+# ログイン後のリダイレクト先を特定のページに
+from django.urls import reverse_lazy
+LOGIN_REDIRECT_URL = reverse_lazy('nippo-list')
+
+# ログアウト時のリダイレクト先
+ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy("account_login")
+
+# E-mailの確認メールとかでよく見るあれ
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+
+#ログアウトの確認をしない
+ACCOUNT_LOGOUT_ON_GET = True
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
