@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 # from random import randint
 from django.views.generic import ListView, DetailView, FormView #インポート
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import NippoModel
 from .forms import NippoModelForm, NippoFormClass
 from django.urls import reverse_lazy
@@ -34,6 +34,11 @@ class NippoUpdateModelFormView(UpdateView):
     template_name = "nippo/nippo-form.html"
     model = NippoModel
     form_class = NippoModelForm
+    success_url = reverse_lazy("nippo-list")
+    
+class NippoDeleteView(DeleteView):
+    template_name = "nippo/nippo-delete.html"
+    model = NippoModel
     success_url = reverse_lazy("nippo-list")
 
 class NippoCreateFormView(FormView):
