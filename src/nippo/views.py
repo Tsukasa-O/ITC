@@ -5,6 +5,19 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import NippoModel
 from .forms import NippoModelForm, NippoFormClass
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib import messages
+
+
+class OwnerOnly(UserPassesTestMixin):
+    # アクセス制限を行う関数
+    def test_func(self):
+        nippo_instance = self.get_object()
+        return nippo_instance.user == self.request.user
+    # Falseだった時のリダイレクト先の指定
+    def handle_no_permission(self):
+        messages.error(self.request, "ご自身の日報でのみ編集・削除可能です")
+        return redirect("nippo-detail", pk=self.kwargs["pk"])
 
 class NippoListView(ListView): #クラス作成
     template_name = "nippo/nippo-list.html" #変数
@@ -25,21 +38,28 @@ class NippoDetailView(DetailView):
     def get_object(self):
         return super().get_object()
     
-class NippoCreateModelFormView(CreateView):
+class NippoCreateModelFormView(LoginRequiredMixin, CreateView):
     template_name = "nippo/nippo-form.html"
     form_class = NippoModelForm
     success_url = reverse_lazy("nippo-list")
     
-class NippoUpdateModelFormView(UpdateView):
+    def get_form_kwargs(self, *args, **kwargs):
+        kwgs = super().get_form_kwargs(*args, **kwargs)
+        kwgs["user"] = self.request.user
+        return kwgs
+    
+class NippoUpdateModelFormView(OwnerOnly, UpdateView):
     template_name = "nippo/nippo-form.html"
     model = NippoModel
     form_class = NippoModelForm
     success_url = reverse_lazy("nippo-list")
     
-class NippoDeleteView(DeleteView):
+class NippoDeleteView(OwnerOnly, DeleteView):
     template_name = "nippo/nippo-delete.html"
     model = NippoModel
     success_url = reverse_lazy("nippo-list")
+
+# 以下未使用
 
 class NippoCreateFormView(FormView):
     template_name = "nippo/nippo-form.html"
