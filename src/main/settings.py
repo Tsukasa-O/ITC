@@ -141,6 +141,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 
 # ログイン後のリダイレクト先を特定のページに
 from django.urls import reverse_lazy
+ACCOUNT_ADAPTER = "accounts.adapter.MyNippoAdapter"
 LOGIN_REDIRECT_URL = reverse_lazy('nippo-list')
 
 # ログアウト時のリダイレクト先
