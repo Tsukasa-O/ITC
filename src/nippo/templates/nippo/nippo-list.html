@@ -30,7 +30,12 @@
                     </p>
                 </div>
                 <div class="card-footer">
-
+                    by 
+                    {% if obj.user == request.user %}
+                        <span class="badge bg-primary">あなた</span>
+                    {% else %}
+                        <span class="badge bg-secondary">{{ obj.user.profile.username }}</span>
+                    {% endif %}
                 </div>
             </div>
             {% include "nippo/nippo-delete.html" with object=obj %}

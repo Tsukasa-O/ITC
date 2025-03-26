@@ -2,7 +2,7 @@ from django import forms
 from django.forms.fields import DateField
 from django.utils.translation import gettext, gettext_lazy as _
 from django.contrib.auth.forms import UserChangeForm
-from .models import User, Profile, GENDER_CHOICE
+from accounts.models import User, Profile, GENDER_CHOICE
 
 #GENDER_CHOICE = [(None, "--"), ("m", "男性"), ("f", "女性")]はmodels.pyで定義してます
 

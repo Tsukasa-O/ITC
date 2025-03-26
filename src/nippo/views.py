@@ -7,6 +7,9 @@ from .forms import NippoModelForm, NippoFormClass
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
+from django.db.models import Q
+from utils.access_restrictions import OwnerOnly
+
 
 
 class OwnerOnly(UserPassesTestMixin):
@@ -24,8 +27,8 @@ class NippoListView(ListView): #クラス作成
     model = NippoModel #変数
     
     def get_queryset(self):
-        qs = NippoModel.objects.all()
-        return qs
+        q = self.request.GET.get("search")
+        return NippoModel.objects.search(query=q)
     
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)

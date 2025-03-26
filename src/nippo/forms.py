@@ -8,9 +8,11 @@ class NippoModelForm(forms.ModelForm):
         # fields = "__all__"
 
     def __init__(self,user=None , *args, **kwargs):
-        for field in self.base_fields.values():
-            field.widget.attrs["class"] = "form-control"
-        self.user = user
+        for key, field in self.base_fields.items():
+            if key != "public":
+                field.widget.attrs["class"] = "form-control"
+            else:
+                field.widget.attrs["class"] = "form-check-input"
         super().__init__(*args, **kwargs)
         
     def save(self, commit=True):
