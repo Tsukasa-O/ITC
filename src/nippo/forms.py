@@ -13,6 +13,7 @@ class NippoModelForm(forms.ModelForm):
                 field.widget.attrs["class"] = "form-control"
             else:
                 field.widget.attrs["class"] = "form-check-input"
+        self.user = user
         super().__init__(*args, **kwargs)
         
     def save(self, commit=True):
