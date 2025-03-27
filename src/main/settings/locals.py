@@ -1,14 +1,20 @@
 from pathlib import Path
+from django.conf import settings
+from dotenv import load_dotenv
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+PARENT_DIR = BASE_DIR.parent
 
+env_path = PARENT_DIR / "auth/.env"
+load_dotenv(env_path)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+4fcuv341$jk@zt3-edrm_p1+u+8^ut=1kka!&ehn^5@$ly8hp'
+SECRET_KEY = os.environ.get("secret_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

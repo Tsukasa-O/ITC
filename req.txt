@@ -10,6 +10,7 @@ django-crispy-forms==2.3
 django-filter==25.1
 pydantic==2.10.6
 pydantic_core==2.27.2
+python-dotenv==1.1.0
 soupsieve==2.6
 sqlparse==0.5.3
 typing_extensions==4.13.0
