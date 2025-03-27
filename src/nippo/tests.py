@@ -46,3 +46,39 @@ class NippoTestCase(TestCase):
         response = self.client.get(url)
         object_list = response.context_data["object_list"]
         self.assertEqual(len(object_list), 1)
+        
+    def make_user_to_create_2_nippo(self, email, pwd="test_pass", number=2):
+        user_obj = User(email=email)
+        user_obj.set_password(pwd)
+        user_obj.save()
+        email_obj = EmailAddress(user=user_obj, email=email, verified=True)
+        email_obj.save()
+        for i in range(number):
+            nippo_obj = self.make_nippo(user=user_obj, public=True)
+        return user_obj
+    
+    #（テスト関数ではない）日報リストプロフィールページから一覧を取得
+    def get_nippo_by_profile(self, user_obj):
+        self.client.force_login(user_obj)
+        url = reverse("nippo-list") + f"?profile={user_obj.profile.id}"
+        response = self.client.get(url)
+        filter = response.context_data["filter"]
+        return len(filter.qs)
+        
+    #profileページのテスト
+    def test_profile_page(self):
+        #メインユーザーの日報数を数えて、表示の確認
+        main_user_nippo = NippoModel.objects.filter(user=self.user_obj).count()
+        profile_list_counter = self.get_nippo_by_profile(self.user_obj)
+        self.assertTrue(main_user_nippo, profile_list_counter)
+        #ほかのユーザーを作成してテスト（自動で2つ日報が作られる）
+        how_many_made_by_another = 3
+        another_user1 = self.make_user_to_create_2_nippo(email="abc_another1@itc.tokyo", number=how_many_made_by_another)
+        another_profile_list_counter = self.get_nippo_by_profile(another_user1)
+        self.assertTrue(how_many_made_by_another, another_profile_list_counter)
+        
+        #ほかのユーザーを作成してテスト（自動で2つ日報が作られる）
+        how_many_made_by_another2 = 5
+        another_user2 = self.make_user_to_create_2_nippo(email="abc_another2@itc.tokyo", number=how_many_made_by_another2)
+        another_profile_list_counter2 = self.get_nippo_by_profile(another_user1)
+        self.assertTrue(how_many_made_by_another2, another_profile_list_counter2)

@@ -1,7 +1,12 @@
 from django import forms
 from .models import NippoModel
+from bootstrap_datepicker_plus.widgets import DatePickerInput
 
 class NippoModelForm(forms.ModelForm):
+    date = forms.DateField(
+        label="作成日",
+        widget=DatePickerInput(format='%Y-%m-%d')
+    )
     class Meta:
         model = NippoModel
         exclude = ["user"]

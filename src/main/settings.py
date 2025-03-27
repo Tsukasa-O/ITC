@@ -34,6 +34,9 @@ INSTALLED_APPS = [
     'nippo',
     'accounts',
     "crispy_forms",
+    'bootstrap4',
+    'bootstrap_datepicker_plus',
+    'django_filters',
     "crispy_bootstrap4",
 ]
 
@@ -64,9 +67,16 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'builtins':[ 
+                'bootstrap4.templatetags.bootstrap4',
+            ],
         },
     },
 ]
+
+BOOTSTRAP4 = {
+    'include_jquery': True,
+}
 
 WSGI_APPLICATION = 'main.wsgi.application'
 

@@ -9,8 +9,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 from django.db.models import Q
 from utils.access_restrictions import OwnerOnly
-
-
+from .filters import NippoModelFilter
+from accounts.models import Profile
 
 class OwnerOnly(UserPassesTestMixin):
     # アクセス制限を行う関数
@@ -32,6 +32,11 @@ class NippoListView(ListView): #クラス作成
     
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
+        ctx["filter"] = NippoModelFilter(self.request.GET, queryset=self.get_queryset())
+        profile_id = self.request.GET.get("profile")
+        q = Profile.objects.filter(id=profile_id)
+        if q.exists():
+            ctx["profile"] = q.first()
         return ctx
 
 class NippoDetailView(DetailView):
